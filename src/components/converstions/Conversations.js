@@ -1,62 +1,146 @@
 import React, {Component} from 'react';
-
+import { sendMsg } from '../../actions/msgsActions';
+import { connect } from 'react-redux';
 class Conversations extends Component
 {
+
+  constructor (props)
+  {
+   
+    super(props);
+    this.msgsend = this.msgsend.bind(this);
+    this.handleChange =  this.handleChange.bind(this);
+    this.state = {
+      msg : "" ,
+      persons : [
+        {
+          image : 'https://ptetutorials.com/images/user-profile.png',
+          lastMessage : 'Hi there what\'s up',
+          time : new Date(), 
+          type : 'in',
+        },
+
+        {
+          image : 'https://ptetutorials.com/images/user-profile.png',
+          lastMessage : 'I m fine ! ',
+          time : new Date(), 
+          type : 'out',
+
+        },
+        {
+          image : 'https://ptetutorials.com/images/user-profile.png',
+          lastMessage : 'Hi there what\'s up',
+          time : new Date(), 
+          type : 'in',
+        },
+
+        {
+          image : 'https://ptetutorials.com/images/user-profile.png',
+          lastMessage : 'I m fine ! ',
+          time : new Date(), 
+          type : 'out',
+
+        },
+      ]
+    }
+  }
+
+  msgsend(event)
+  {
+    console.log(this.state.msg);
+
+    if(this.state.msg !== "")
+    {
+
+      var chat = { 
+          image : 'https://ptetutorials.com/images/user-profile.png',
+          lastMessage : this.state.msg,
+          time : new Date(), 
+          type : 'out',
+      };
+
+      var newChat = this.state.persons.concat(chat);
+      this.setState ({
+      persons : newChat,
+      msg : "",
+      })
+      
+      this.props.sendMsg(newChat);
+      event.preventDefault();
+      
+    }
+    else
+    {
+      alert("Enter a message !")
+      event.preventDefault();
+    }
+  }
+
+
+  handleChange (event)
+  {
+    this.setState({
+      msg : event.target.value
+    });
+
+    // console.log(this.state.msg);
+  }
     render()
     {
         return(
             <div className="mesgs">
                   <div className="msg_history">
                     <div className="incoming_msg">
-                      <div className="incoming_msg_img"><img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"/>
-                        </div>
 
-                      <div className="received_msg">
-                        <div className="received_withd_msg">
-                          <p>Test which is a new approach to have all
-                            solutions</p>
-                          <span className="time_date"> 11:01 AM    |    June 9</span></div>
-                      </div>
-                    </div>
-                    <div className="outgoing_msg">
-                      <div className="sent_msg">
-                        <p>Test which is a new approach to have all
-                          solutions</p>
-                        <span className="time_date"> 11:01 AM    |    June 9</span> </div>
-                    </div>
-                    <div className="incoming_msg">
-                      <div className="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"/> </div>
-                      <div className="received_msg">
-                        <div className="received_withd_msg">
-                          <p>Test, which is a new approach to have</p>
-                          <span className="time_date"> 11:01 AM    |    Yesterday</span></div>
-                      </div>
-                    </div>
-                    <div className="outgoing_msg">
-                      <div className="sent_msg">
-                        <p>Apollo University, Delhi, India Test</p>
-                        <span className="time_date"> 11:01 AM    |    Today</span> </div>
-                    </div>
-                    <div className="incoming_msg">
-                      <div className="incoming_msg_img"> <img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"/> </div>
-                      <div className="received_msg">
-                        <div className="received_withd_msg">
-                          <p>We work directly with our designers and suppliers,
-                            and sell direct to you, which means quality, exclusive
-                            products, at a price anyone can afford.</p>
-                          <span className="time_date"> 11:01 AM    |    Today</span></div>
-                      </div>
-                    </div>
-                  </div>
+                        {
+                          this.state.persons.map(function(value,index){
+
+                            if(value.type === 'in')
+                            return(
+                              <div className="received_msg">
+                              <div className="received_withd_msg">
+
+                              <p>{value.lastMessage}</p>
+                              <span className="time_date">{value.time.toLocaleTimeString()}</span>
+                              </div>
+                              </div>   
+                             
+                            );
+                            else
+                            return(
+                              <div className="outgoing_msg">
+                              <div className="sent_msg">
+                              <p>{value.lastMessage}</p>
+                              <span className="time_date">{value.time.toLocaleTimeString()}</span>
+                              </div>
+                              </div>
+                            );
+                          })
+                        }
+                               
                   <div className="type_msg">
                     <div className="input_msg_write">
-                      <input type="text" className="write_msg" placeholder="Type a message"/>
-                      <button className="msg_send_btn" type="button"><i className="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+
+                      <form onSubmit={this.msgsend}>
+                        <input type="text" className="write_msg form-control" onChange={this.handleChange}
+                        value={this.state.msg} placeholder="Type a message. ."/>
+                        <button  className="msg_send_btn" type="submit"><i class="fas fa-paper-plane"></i></button>
+                      </form>
+
                     </div>
                   </div>
                 </div>
+              </div>
+          </div>
 
         );
     }
 }
-export default Conversations;
+
+  const mapStatetoProps = (state) => (
+    console.log(state),
+  {
+    msg : state.msg
+  })
+
+export default connect(mapStatetoProps,{sendMsg}) (Conversations);

@@ -2,6 +2,60 @@ import React, {Component} from 'react';
 
 class ChatRooms extends Component
 {
+
+    constructor (props)
+  {
+    super(props);
+    this.state = {
+
+      activeNode : null ,
+      persons : [
+        {
+          name  :'Syed Ebad',
+          image : 'https://ptetutorials.com/images/user-profile.png',
+          lastMessage : 'Hi there what\'s up',
+          time : new Date(), 
+          nodeKey : 1,
+        },
+
+        {
+          name  :'S M Arif',
+          image : 'https://ptetutorials.com/images/user-profile.png',
+          lastMessage : 'Hi there what\'s up',
+          time : new Date(), 
+          nodeKey : 2,
+
+        },
+
+        {
+          name  :'Abdul Nafay',
+          image : 'https://ptetutorials.com/images/user-profile.png',
+          lastMessage : 'Hi there what\'s up',
+          time : new Date(), 
+          nodeKey : 3,
+
+        },
+
+        {
+          name  :'S M Zafar',
+          image : 'https://ptetutorials.com/images/user-profile.png',
+          lastMessage : 'Hi there what\'s up',
+          time : new Date(),
+          nodeKey : 4,
+          
+        },
+      ]
+    }
+  }
+  
+  abc = (value) =>
+  {
+    this.setState({
+      activeNode : value.nodeKey
+    });
+    console.log(this.state);
+  }
+
     render()
     {
         return(
@@ -12,27 +66,41 @@ class ChatRooms extends Component
                         </div>
                             <div className="srch_bar">
                                 <div className="stylish-input-group">
-                                <input type="text" className="search-bar form-control" placeholder="Search"/>
-                                <span className="input-group-addon">
-                                <button type="button"> <i className="fa fa-search" aria-hidden="true"></i></button>
-                                </span> 
+                                    <input type="text" className="search-bar " placeholder="Search"/>
+                                    <span className="input-group-addon">
+                                    <button type="button"> <i className="fa fa-search" aria-hidden="true"></i></button>
+                                    </span> 
+                                </div>
                             </div>
-                        </div>
-                        <div className="inbox_chat">
-                            <div className="chat_list active_chat">
-                                <div className="chat_people">
-                                    <div className="chat_img"><img src="https://ptetutorials.com/images/user-profile.png" alt="sunil"/>   
-                                    </div>
+                            <div className="inbox_chat">
+                            
+                            {
+                              this.state.persons.map(function(value,index)
+                              {
+                    
+                                return(
+                                  
+                                  <div className={this.state.activeNode !== null && this.state.activeNode === value.nodeKey ? 'active_chat chat_list' : 'chat_list'} onClick={()=> {
+                                    this.abc(value);
+                                  }}>
+                                    <div className="chat_people">
+                                        <div className="chat_img"><img src={value.image} alt="sunil"/>   
+                                        </div>
                                     <div className="chat_ib">
-                                    <h5>Sunil Rajput <span className="chat_date">Dec 25</span></h5>
-                                    <p>Test, which is a new approach to have all solutions 
-                                    astrology under one roof.</p>
+                                        <h5>{value.name} <span className="chat_date">{value.time.toLocaleDateString()}</span></h5>
+                                        <p>{value.lastMessage}</p>
+                                        </div>
                                     </div>
+                                </div>
+                                
+                                )
+                              },this)
+                            }
+                            
                             </div>
-                        </div>
-                    </div>    
-                </div> 
-                </div>
+                      
+                        </div>    
+                 </div>
         );
     }
 }
