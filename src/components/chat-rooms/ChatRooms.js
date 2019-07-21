@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
+import { getChatRooms } from '../../actions/chatRoomsActions';
+import { connect } from 'react-redux';
 
 class ChatRooms extends Component
 {
-
     constructor (props)
   {
     super(props);
@@ -46,6 +47,11 @@ class ChatRooms extends Component
         },
       ]
     }
+  }
+
+  componentWillMount()
+  {
+    this.props.getChatRooms();
   }
   
   abc = (value) =>
@@ -105,4 +111,51 @@ class ChatRooms extends Component
     }
 }
 
-export default ChatRooms;
+const mapStatetoProps = (state) => (
+  console.log(state),
+{
+  msg : state.msg
+})
+
+export default connect(mapStatetoProps,{ getChatRooms }) (ChatRooms);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
